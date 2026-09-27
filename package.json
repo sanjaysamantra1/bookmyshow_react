@@ -1,0 +1,9 @@
+{
+  "name": "bookmyshow-react-vite",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {"dev":"vite","build":"tsc -b && vite build","preview":"vite preview"},
+  "dependencies": {"@vitejs/plugin-react":"latest","bootstrap":"^5.3.8","react":"latest","react-dom":"latest","react-router-dom":"latest"},
+  "devDependencies": {"typescript":"~5.9.2","vite":"latest","@types/react":"latest","@types/react-dom":"latest","eslint":"latest"}
+}

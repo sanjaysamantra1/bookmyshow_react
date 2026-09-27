@@ -1,0 +1,77 @@
+.filter-panel {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 20px;
+  position: sticky;
+  top: 16px;
+}
+
+.filter-header {
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 12px;
+}
+
+.filter-header .fw-bold {
+  font-size: 15px;
+  color: #1a1a1a;
+}
+
+.btn-clear {
+  background: none;
+  border: none;
+  color: #f84464;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.btn-clear:hover { text-decoration: underline; }
+
+.filter-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.filter-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border: 1px solid #d0d0d0;
+  border-radius: 20px;
+  font-size: 12px;
+  color: #444;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.filter-chip input[type="checkbox"] { display: none; }
+
+.filter-chip:hover {
+  border-color: #f84464;
+  color: #f84464;
+}
+
+.filter-chip.selected {
+  background-color: #f84464;
+  border-color: #f84464;
+  color: #fff;
+  font-weight: 600;
+}
+
+.filter-divider {
+  border-color: #f0f0f0;
+  margin: 0 0 20px;
+}

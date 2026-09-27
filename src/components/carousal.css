@@ -1,0 +1,21 @@
+.bms-carousel {
+  background: #1a1a2e;
+}
+
+.carousel-img {
+  height: 360px;
+  object-fit: cover;
+  object-position: center top;
+}
+
+@media (max-width: 768px) {
+  .carousel-img { height: 190px; }
+}
+
+.carousel-indicators [data-bs-target] {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  border: none;
+  opacity: 0.5;
+}
+.carousel-indicators .active { opacity: 1; background-color: #f84464; }
