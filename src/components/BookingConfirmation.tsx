@@ -1,1 +1,93 @@
-import {Link,useParams} from 'react-router-dom';import {useBookings} from '../context/AppContext';import './booking-confirmation.css';export default function BookingConfirmation(){const {id}=useParams(),b=useBookings(),booking=b.getBookingById(id||'');if(!booking)return <div className="container py-5 text-center"><p>Booking not found.</p><Link to="/">Go Home</Link></div>;const seats=booking.seats.reduce((s:any,x:any)=>s+x.count,0);return <div className="confirm-page container py-5"><div className="confirm-hero text-center mb-5"><div className="success-anim">✅</div><h3 className="fw-bold mt-3 mb-1">Booking Confirmed!</h3><p className="text-muted">Your tickets are booked. Have a great time!</p><div className="booking-id-badge">Booking ID: <strong>{booking.id}</strong></div></div><div className="row g-4 justify-content-center"><div className="col-lg-7"><div className="ticket-card"><div className="ticket-top d-flex gap-4"><img src={booking.moviePoster} className="ticket-poster" alt={booking.movieTitle}/><div className="ticket-info"><h5 className="ticket-movie">{booking.movieTitle}</h5><p className="ticket-meta">📍 {booking.showTime.venue}</p><p className="ticket-meta">🕐 {booking.showTime.time} · {booking.showTime.format}</p><p className="ticket-meta">📅 {booking.bookedAt}</p><p className="ticket-meta">🏙️ {booking.city}</p></div></div><div className="ticket-tear"/><div className="ticket-bottom"><div className="seat-summary">{booking.seats.map((s:any)=><div className="seat-row" key={s.category}><span className="seat-chip">{s.category} × {s.count}</span><span className="seat-amt">₹{(s.count*s.pricePerSeat).toLocaleString('en-IN')}</span></div>)}</div><div className="ticket-total-row"><span>Total Paid</span><span className="ticket-total-amt">₹{booking.totalAmount.toLocaleString('en-IN')}</span></div><p className="convenience-note">Includes ₹{booking.convenienceFee.toLocaleString('en-IN')} convenience fee · {seats} seat{seats!==1?'s':''}</p></div><div className="barcode-strip"><div className="barcode-img">| || ||| | || ||| |||| || | | ||| || | | ||| |</div><span className="barcode-id">{booking.id}</span></div></div></div><div className="col-lg-7"><div className="confirm-actions d-flex gap-3 flex-wrap justify-content-center"><Link to="/bookings" className="btn-action-outline">📋 View All Bookings</Link><Link to="/" className="btn-action-primary">🏠 Back to Home</Link></div></div></div></div>}
+import { Link, useParams } from "react-router-dom";
+import { useBookings } from "../context/AppContext";
+import "./booking-confirmation.css";
+export default function BookingConfirmation() {
+  const { id } = useParams(),
+    b = useBookings(),
+    booking = b.getBookingById(id || "");
+  if (!booking)
+    return (
+      <div className="container py-5 text-center">
+        <p>Booking not found.</p>
+        <Link to="/">Go Home</Link>
+      </div>
+    );
+  const seats = booking.seats.reduce((s: any, x: any) => s + x.count, 0);
+  return (
+    <div className="confirm-page container py-5">
+      <div className="confirm-hero text-center mb-5">
+        <div className="success-anim">✅</div>
+        <h3 className="fw-bold mt-3 mb-1">Booking Confirmed!</h3>
+        <p className="text-muted">
+          Your tickets are booked. Have a great time!
+        </p>
+        <div className="booking-id-badge">
+          Booking ID: <strong>{booking.id}</strong>
+        </div>
+      </div>
+      <div className="row g-4 justify-content-center">
+        <div className="col-lg-7">
+          <div className="ticket-card">
+            <div className="ticket-top d-flex gap-4">
+              <img
+                src={booking.moviePoster}
+                className="ticket-poster"
+                alt={booking.movieTitle}
+              />
+              <div className="ticket-info">
+                <h5 className="ticket-movie">{booking.movieTitle}</h5>
+                <p className="ticket-meta">📍 {booking.showTime.venue}</p>
+                <p className="ticket-meta">
+                  🕐 {booking.showTime.time} · {booking.showTime.format}
+                </p>
+                <p className="ticket-meta">📅 {booking.bookedAt}</p>
+                <p className="ticket-meta">🏙️ {booking.city}</p>
+              </div>
+            </div>
+            <div className="ticket-tear" />
+            <div className="ticket-bottom">
+              <div className="seat-summary">
+                {booking.seats.map((s: any) => (
+                  <div className="seat-row" key={s.category}>
+                    <span className="seat-chip">
+                      {s.category} × {s.count}
+                    </span>
+                    <span className="seat-amt">
+                      ₹{(s.count * s.pricePerSeat).toLocaleString("en-IN")}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div className="ticket-total-row">
+                <span>Total Paid</span>
+                <span className="ticket-total-amt">
+                  ₹{booking.totalAmount.toLocaleString("en-IN")}
+                </span>
+              </div>
+              <p className="convenience-note">
+                Includes ₹{booking.convenienceFee.toLocaleString("en-IN")}{" "}
+                convenience fee · {seats} seat{seats !== 1 ? "s" : ""}
+              </p>
+            </div>
+            <div className="barcode-strip">
+              <div className="barcode-img">
+                | || ||| | || ||| |||| || | | ||| || | | ||| |
+              </div>
+              <span className="barcode-id">{booking.id}</span>
+            </div>
+          </div>
+        </div>
+        <div className="col-lg-7">
+          <div className="confirm-actions d-flex gap-3 flex-wrap justify-content-center">
+            <Link to="/bookings" className="btn-action-outline">
+              📋 View All Bookings
+            </Link>
+            <Link to="/" className="btn-action-primary">
+              🏠 Back to Home
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

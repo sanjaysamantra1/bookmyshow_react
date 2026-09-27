@@ -1,2 +1,265 @@
-import {Link,useParams} from 'react-router-dom';import {useMovies} from '../context/AppContext';import './movie-detail.css';const extras:any={1:{description:'Jawan is a high-octane action thriller about a man driven to right the wrongs in society.',duration:'2h 49m',director:'Atlee',cast:['Shah Rukh Khan','Nayanthara','Vijay Sethupathi']},2:{description:'Salaar is a tale about a violent man who is caught between honouring a promise and protecting his friends.',duration:'3h 0m',director:'Prashanth Neel',cast:['Prabhas','Prithviraj Sukumaran','Shruti Haasan']},3:{description:'Leo is an action thriller about a mild-mannered man whose past comes back to haunt him.',duration:'2h 44m',director:'Lokesh Kanagaraj',cast:['Vijay','Trisha Krishnan','Sanjay Dutt']},4:{description:'Dunki follows a group of people who take an illegal route to travel to foreign shores.',duration:'2h 41m',director:'Rajkumar Hirani',cast:['Shah Rukh Khan','Taapsee Pannu','Vicky Kaushal']},5:{description:"Animal is a story of a man's love and obsession for his father, and his descent into violence.",duration:'3h 21m',director:'Sandeep Reddy Vanga',cast:['Ranbir Kapoor','Rashmika Mandanna','Anil Kapoor']},6:{description:'Fighter is a patriotic action drama about India’s first aerial action film.',duration:'2h 46m',director:'Siddharth Anand',cast:['Hrithik Roshan','Deepika Padukone','Anil Kapoor']},7:{description:'Pushpa 2 continues the saga of Pushpa Raj, now a powerful and feared figure in the red sandalwood trade.',duration:'3h 21m',director:'Sukumar',cast:['Allu Arjun','Rashmika Mandanna','Fahadh Faasil']},8:{description:"A Christmas night that changes two strangers' lives forever in an unexpected mystery.",duration:'2h 25m',director:'Sriram Raghavan',cast:['Katrina Kaif','Vijay Sethupathi']},9:{description:'A family drama about relationships, expectations, and the truth hidden behind them.',duration:'2h 25m',director:'Trivikram Srinivas',cast:['Mahesh Babu','Sreeleela','Prakash Raj']},10:{description:'Hanu-Man is a superhero origin story about an ordinary man who gains the powers of Lord Hanuman.',duration:'2h 32m',director:'Prasanth Varma',cast:['Teja Sajja','Amritha Aiyer','Varalaxmi Sarathkumar']},11:{description:'Captain Miller is set in the pre-independence era about a rebel who fights against oppression.',duration:'2h 37m',director:'Arun Matheswaran',cast:['Dhanush','Priyanka Arul Mohan','Sundeep Kishan']},12:{description:'Article 370 depicts the abrogation of Article 370 and the events leading up to it.',duration:'2h 38m',director:'Aditya Suhas Jambhale',cast:['Yami Gautam','Priyamani','Arun Govil']}};
-export default function MovieDetail(){const {id}=useParams(),m=useMovies(),movie=m.allMovies.find((x:any)=>x.id===Number(id)),ex=movie?extras[movie.id]:null;if(!movie)return <div className="container py-5 text-center"><p className="text-muted">Movie not found.</p><Link to="/movies" className="btn-back">← Back to Movies</Link></div>;const related=m.allMovies.filter((x:any)=>x.id!==movie.id&&x.genre.some((g:string)=>movie.genre.includes(g))).slice(0,5);return <><div className="detail-hero"><div className="hero-backdrop"><img src={movie.poster} className="hero-bg-img" alt=""/></div><div className="hero-overlay"><div className="container"><div className="hero-content d-flex gap-4 align-items-end"><img src={movie.poster} alt={movie.title} className="hero-poster"/><div className="hero-info"><div className="d-flex align-items-center gap-2 mb-2"><span className="cert-badge-lg">{movie.certification}</span><span className="hero-rating">★ {movie.rating}/10</span><span className="hero-votes">{movie.votes} votes</span></div><h2 className="hero-title">{movie.title}</h2><div className="hero-meta mb-2">{movie.genre.map((g:string)=><span className="hero-genre-chip" key={g}>{g}</span>)}</div>{ex&&<><p className="hero-duration">⏱ {ex.duration} · {movie.language.join(', ')}</p><p className="hero-director">Directed by <strong>{ex.director}</strong></p></>}<div className="hero-actions mt-3 d-flex gap-3 flex-wrap"><Link to={`/movies/${movie.id}/book`} className="btn-book-now">🎟 Book Tickets</Link><button className="btn-wishlist">♡ Wishlist</button></div></div></div></div></div></div><div className="container py-4"><div className="row g-4"><div className="col-lg-8"><div className="detail-card mb-4"><h6 className="detail-section-title">About the movie</h6><p className="detail-desc">{ex?.description||'No description available.'}</p></div>{ex?.cast?.length&&<div className="detail-card mb-4"><h6 className="detail-section-title">Cast</h6><div className="cast-row">{ex.cast.map((a:string)=><div className="cast-chip" key={a}><div className="cast-avatar">{a.charAt(0)}</div><span className="cast-name">{a}</span></div>)}</div></div>}{related.length>0&&<div className="detail-card"><h6 className="detail-section-title">You may also like</h6><div className="d-flex gap-3 flex-wrap">{related.map((x:any)=><Link to={`/movies/${x.id}`} className="related-card" key={x.id}><img src={x.poster} alt={x.title} className="related-poster"/><p className="related-title">{x.title}</p><p className="related-rating">★ {x.rating}</p></Link>)}</div></div>}</div><div className="col-lg-4"><div className="detail-card mb-3"><h6 className="detail-section-title">Movie info</h6><table className="info-table"><tbody><tr><td className="info-label">Genre</td><td className="info-value">{movie.genre.join(', ')}</td></tr>{ex&&<><tr><td className="info-label">Duration</td><td className="info-value">{ex.duration}</td></tr><tr><td className="info-label">Director</td><td className="info-value">{ex.director}</td></tr></>}<tr><td className="info-label">Language</td><td className="info-value">{movie.language.join(', ')}</td></tr><tr><td className="info-label">Certificate</td><td className="info-value"><span className="cert-badge-sm">{movie.certification}</span></td></tr><tr><td className="info-label">Rating</td><td className="info-value"><span className="star-yellow">★</span> {movie.rating}/10 ({movie.votes})</td></tr></tbody></table></div><Link to={`/movies/${movie.id}/book`} className="btn-book-now d-block text-center mb-3">🎟 Book Tickets</Link><Link to="/movies" className="btn-back">← Back to Movies</Link></div></div></div></>}
+import { Link, useParams } from "react-router-dom";
+import { useMovies } from "../context/AppContext";
+import "./movie-detail.css";
+const extras: any = {
+  1: {
+    description:
+      "Jawan is a high-octane action thriller about a man driven to right the wrongs in society.",
+    duration: "2h 49m",
+    director: "Atlee",
+    cast: ["Shah Rukh Khan", "Nayanthara", "Vijay Sethupathi"],
+  },
+  2: {
+    description:
+      "Salaar is a tale about a violent man who is caught between honouring a promise and protecting his friends.",
+    duration: "3h 0m",
+    director: "Prashanth Neel",
+    cast: ["Prabhas", "Prithviraj Sukumaran", "Shruti Haasan"],
+  },
+  3: {
+    description:
+      "Leo is an action thriller about a mild-mannered man whose past comes back to haunt him.",
+    duration: "2h 44m",
+    director: "Lokesh Kanagaraj",
+    cast: ["Vijay", "Trisha Krishnan", "Sanjay Dutt"],
+  },
+  4: {
+    description:
+      "Dunki follows a group of people who take an illegal route to travel to foreign shores.",
+    duration: "2h 41m",
+    director: "Rajkumar Hirani",
+    cast: ["Shah Rukh Khan", "Taapsee Pannu", "Vicky Kaushal"],
+  },
+  5: {
+    description:
+      "Animal is a story of a man's love and obsession for his father, and his descent into violence.",
+    duration: "3h 21m",
+    director: "Sandeep Reddy Vanga",
+    cast: ["Ranbir Kapoor", "Rashmika Mandanna", "Anil Kapoor"],
+  },
+  6: {
+    description:
+      "Fighter is a patriotic action drama about India’s first aerial action film.",
+    duration: "2h 46m",
+    director: "Siddharth Anand",
+    cast: ["Hrithik Roshan", "Deepika Padukone", "Anil Kapoor"],
+  },
+  7: {
+    description:
+      "Pushpa 2 continues the saga of Pushpa Raj, now a powerful and feared figure in the red sandalwood trade.",
+    duration: "3h 21m",
+    director: "Sukumar",
+    cast: ["Allu Arjun", "Rashmika Mandanna", "Fahadh Faasil"],
+  },
+  8: {
+    description:
+      "A Christmas night that changes two strangers' lives forever in an unexpected mystery.",
+    duration: "2h 25m",
+    director: "Sriram Raghavan",
+    cast: ["Katrina Kaif", "Vijay Sethupathi"],
+  },
+  9: {
+    description:
+      "A family drama about relationships, expectations, and the truth hidden behind them.",
+    duration: "2h 25m",
+    director: "Trivikram Srinivas",
+    cast: ["Mahesh Babu", "Sreeleela", "Prakash Raj"],
+  },
+  10: {
+    description:
+      "Hanu-Man is a superhero origin story about an ordinary man who gains the powers of Lord Hanuman.",
+    duration: "2h 32m",
+    director: "Prasanth Varma",
+    cast: ["Teja Sajja", "Amritha Aiyer", "Varalaxmi Sarathkumar"],
+  },
+  11: {
+    description:
+      "Captain Miller is set in the pre-independence era about a rebel who fights against oppression.",
+    duration: "2h 37m",
+    director: "Arun Matheswaran",
+    cast: ["Dhanush", "Priyanka Arul Mohan", "Sundeep Kishan"],
+  },
+  12: {
+    description:
+      "Article 370 depicts the abrogation of Article 370 and the events leading up to it.",
+    duration: "2h 38m",
+    director: "Aditya Suhas Jambhale",
+    cast: ["Yami Gautam", "Priyamani", "Arun Govil"],
+  },
+};
+export default function MovieDetail() {
+  const { id } = useParams(),
+    m = useMovies(),
+    movie = m.allMovies.find((x: any) => x.id === Number(id)),
+    ex = movie ? extras[movie.id] : null;
+  if (!movie)
+    return (
+      <div className="container py-5 text-center">
+        <p className="text-muted">Movie not found.</p>
+        <Link to="/movies" className="btn-back">
+          ← Back to Movies
+        </Link>
+      </div>
+    );
+  const related = m.allMovies
+    .filter(
+      (x: any) =>
+        x.id !== movie.id &&
+        x.genre.some((g: string) => movie.genre.includes(g)),
+    )
+    .slice(0, 5);
+  return (
+    <>
+      <div className="detail-hero">
+        <div className="hero-backdrop">
+          <img src={movie.poster} className="hero-bg-img" alt="" />
+        </div>
+        <div className="hero-overlay">
+          <div className="container">
+            <div className="hero-content d-flex gap-4 align-items-end">
+              <img
+                src={movie.poster}
+                alt={movie.title}
+                className="hero-poster"
+              />
+              <div className="hero-info">
+                <div className="d-flex align-items-center gap-2 mb-2">
+                  <span className="cert-badge-lg">{movie.certification}</span>
+                  <span className="hero-rating">★ {movie.rating}/10</span>
+                  <span className="hero-votes">{movie.votes} votes</span>
+                </div>
+                <h2 className="hero-title">{movie.title}</h2>
+                <div className="hero-meta mb-2">
+                  {movie.genre.map((g: string) => (
+                    <span className="hero-genre-chip" key={g}>
+                      {g}
+                    </span>
+                  ))}
+                </div>
+                {ex && (
+                  <>
+                    <p className="hero-duration">
+                      ⏱ {ex.duration} · {movie.language.join(", ")}
+                    </p>
+                    <p className="hero-director">
+                      Directed by <strong>{ex.director}</strong>
+                    </p>
+                  </>
+                )}
+                <div className="hero-actions mt-3 d-flex gap-3 flex-wrap">
+                  <Link
+                    to={`/movies/${movie.id}/book`}
+                    className="btn-book-now"
+                  >
+                    🎟 Book Tickets
+                  </Link>
+                  <button className="btn-wishlist">♡ Wishlist</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="container py-4">
+        <div className="row g-4">
+          <div className="col-lg-8">
+            <div className="detail-card mb-4">
+              <h6 className="detail-section-title">About the movie</h6>
+              <p className="detail-desc">
+                {ex?.description || "No description available."}
+              </p>
+            </div>
+            {ex?.cast?.length && (
+              <div className="detail-card mb-4">
+                <h6 className="detail-section-title">Cast</h6>
+                <div className="cast-row">
+                  {ex.cast.map((a: string) => (
+                    <div className="cast-chip" key={a}>
+                      <div className="cast-avatar">{a.charAt(0)}</div>
+                      <span className="cast-name">{a}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {related.length > 0 && (
+              <div className="detail-card">
+                <h6 className="detail-section-title">You may also like</h6>
+                <div className="d-flex gap-3 flex-wrap">
+                  {related.map((x: any) => (
+                    <Link
+                      to={`/movies/${x.id}`}
+                      className="related-card"
+                      key={x.id}
+                    >
+                      <img
+                        src={x.poster}
+                        alt={x.title}
+                        className="related-poster"
+                      />
+                      <p className="related-title">{x.title}</p>
+                      <p className="related-rating">★ {x.rating}</p>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="col-lg-4">
+            <div className="detail-card mb-3">
+              <h6 className="detail-section-title">Movie info</h6>
+              <table className="info-table">
+                <tbody>
+                  <tr>
+                    <td className="info-label">Genre</td>
+                    <td className="info-value">{movie.genre.join(", ")}</td>
+                  </tr>
+                  {ex && (
+                    <>
+                      <tr>
+                        <td className="info-label">Duration</td>
+                        <td className="info-value">{ex.duration}</td>
+                      </tr>
+                      <tr>
+                        <td className="info-label">Director</td>
+                        <td className="info-value">{ex.director}</td>
+                      </tr>
+                    </>
+                  )}
+                  <tr>
+                    <td className="info-label">Language</td>
+                    <td className="info-value">{movie.language.join(", ")}</td>
+                  </tr>
+                  <tr>
+                    <td className="info-label">Certificate</td>
+                    <td className="info-value">
+                      <span className="cert-badge-sm">
+                        {movie.certification}
+                      </span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="info-label">Rating</td>
+                    <td className="info-value">
+                      <span className="star-yellow">★</span> {movie.rating}/10 (
+                      {movie.votes})
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <Link
+              to={`/movies/${movie.id}/book`}
+              className="btn-book-now d-block text-center mb-3"
+            >
+              🎟 Book Tickets
+            </Link>
+            <Link to="/movies" className="btn-back">
+              ← Back to Movies
+            </Link>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}

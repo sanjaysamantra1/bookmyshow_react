@@ -1,2 +1,192 @@
-import {useEffect,useState} from 'react';import {Link,useNavigate} from 'react-router-dom';import {useAuth,useCity,useSearch} from '../context/AppContext';import './header.css';
-export default function Header(){const auth=useAuth(),city=useCity(),search=useSearch(),nav=useNavigate();const [userOpen,setUserOpen]=useState(false),[cityOpen,setCityOpen]=useState(false);useEffect(()=>{const h=(e:MouseEvent)=>{const t=e.target as HTMLElement;if(!t.closest('.user-menu-wrap'))setUserOpen(false);if(!t.closest('.city-menu-wrap'))setCityOpen(false);if(!t.closest('.search-wrap'))search.clear()};document.addEventListener('click',h);return()=>document.removeEventListener('click',h)},[search]);const go=(r:any)=>{search.clear();if(r.type==='movie')nav(`/movies/${r.id}`);else nav('/events')};return <nav className="bms-header"><div className="container-fluid px-3"><div className="d-flex align-items-center gap-3"><Link className="header-logo flex-shrink-0" to="/"><img src="/images/bms-logo.png" alt="BookMyShow" height="34"/></Link><div className="search-wrap flex-grow-1 d-none d-md-block position-relative" onClick={e=>e.stopPropagation()}><div className="header-search"><span className="search-icon">🔍</span><input value={search.query} onChange={e=>search.setQuery(e.target.value)} onKeyDown={e=>{if(e.key==='Escape')search.clear()}} type="text" className="search-input" placeholder="Search for Movies, Events, Plays, Sports and Activities"/>{search.query&&<button className="search-clear" onClick={search.clear}>✕</button>}</div>{search.isOpen&&search.results.length>0&&<div className="search-dropdown">{search.results.map((r:any)=><div className="search-result-item" key={r.id+r.type} onClick={()=>go(r)}><img src={r.image} className="result-img" alt=""/><div className="result-text"><span className="result-title">{r.title}</span><span className="result-sub">{r.subtitle}</span></div><span className={'result-type-badge '+(r.type==='movie'?'badge-movie':'badge-event')}>{r.type==='movie'?'🎬 Movie':'🎭 Event'}</span></div>)}</div>}{search.isOpen&&search.results.length===0&&<div className="search-dropdown search-empty"><p className="mb-0">No results found for "<strong>{search.query}</strong>"</p></div>}</div><div className="d-flex align-items-center gap-2 flex-shrink-0"><div className="city-menu-wrap d-none d-md-block position-relative"><button className="city-btn" onClick={e=>{e.stopPropagation();setCityOpen(!cityOpen);setUserOpen(false)}}><span>📍</span><span className="city-name">{city.selectedCity}</span><span className="city-caret">▾</span></button>{cityOpen&&<div className="city-dropdown"> <p className="city-dropdown-title">Select your city</p><div className="city-grid">{city.cities.map((c:string)=><button key={c} className={'city-option '+(city.selectedCity===c?'city-selected':'')} onClick={()=>{city.setCity(c);setCityOpen(false)}}>{c}</button>)}</div></div>}</div>{auth.isLoggedIn?<div className="user-menu-wrap position-relative"><button className="user-btn" onClick={e=>{e.stopPropagation();setUserOpen(!userOpen);setCityOpen(false)}}><span className="user-avatar">{auth.currentUser?.name?.charAt(0).toUpperCase()}</span><span className="user-name d-none d-md-inline">{auth.currentUser?.name}</span><span className="city-caret">▾</span></button>{userOpen&&<div className="user-dropdown"><div className="dropdown-user-info"><span className="dropdown-avatar">{auth.currentUser?.name?.charAt(0).toUpperCase()}</span><div><p className="dropdown-name">{auth.currentUser?.name}</p><p className="dropdown-email">{auth.currentUser?.email}</p></div></div><hr className="dropdown-divider"/><Link to="/bookings" className="dropdown-item-link" onClick={()=>setUserOpen(false)}>🎟️ My Bookings</Link><hr className="dropdown-divider"/><button className="dropdown-logout" onClick={()=>{setUserOpen(false);auth.logout();nav('/')}}>🚪 Sign Out</button></div>}</div>:<Link to="/login" className="btn-signin">Sign in</Link>}</div></div></div></nav>}
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth, useCity, useSearch } from "../context/AppContext";
+import "./header.css";
+export default function Header() {
+  const auth = useAuth(),
+    city = useCity(),
+    search = useSearch(),
+    nav = useNavigate();
+  const [userOpen, setUserOpen] = useState(false),
+    [cityOpen, setCityOpen] = useState(false);
+  useEffect(() => {
+    const h = (e: MouseEvent) => {
+      const t = e.target as HTMLElement;
+      if (!t.closest(".user-menu-wrap")) setUserOpen(false);
+      if (!t.closest(".city-menu-wrap")) setCityOpen(false);
+      if (!t.closest(".search-wrap")) search.clear();
+    };
+    document.addEventListener("click", h);
+    return () => document.removeEventListener("click", h);
+  }, [search]);
+  const go = (r: any) => {
+    search.clear();
+    if (r.type === "movie") nav(`/movies/${r.id}`);
+    else nav("/events");
+  };
+  return (
+    <nav className="bms-header">
+      <div className="container-fluid px-3">
+        <div className="d-flex align-items-center gap-3">
+          <Link className="header-logo flex-shrink-0" to="/">
+            <img src="/images/bms-logo.png" alt="BookMyShow" height="34" />
+          </Link>
+          <div
+            className="search-wrap flex-grow-1 d-none d-md-block position-relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="header-search">
+              <span className="search-icon">🔍</span>
+              <input
+                value={search.query}
+                onChange={(e) => search.setQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Escape") search.clear();
+                }}
+                type="text"
+                className="search-input"
+                placeholder="Search for Movies, Events, Plays, Sports and Activities"
+              />
+              {search.query && (
+                <button className="search-clear" onClick={search.clear}>
+                  ✕
+                </button>
+              )}
+            </div>
+            {search.isOpen && search.results.length > 0 && (
+              <div className="search-dropdown">
+                {search.results.map((r: any) => (
+                  <div
+                    className="search-result-item"
+                    key={r.id + r.type}
+                    onClick={() => go(r)}
+                  >
+                    <img src={r.image} className="result-img" alt="" />
+                    <div className="result-text">
+                      <span className="result-title">{r.title}</span>
+                      <span className="result-sub">{r.subtitle}</span>
+                    </div>
+                    <span
+                      className={
+                        "result-type-badge " +
+                        (r.type === "movie" ? "badge-movie" : "badge-event")
+                      }
+                    >
+                      {r.type === "movie" ? "🎬 Movie" : "🎭 Event"}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+            {search.isOpen && search.results.length === 0 && (
+              <div className="search-dropdown search-empty">
+                <p className="mb-0">
+                  No results found for "<strong>{search.query}</strong>"
+                </p>
+              </div>
+            )}
+          </div>
+          <div className="d-flex align-items-center gap-2 flex-shrink-0">
+            <div className="city-menu-wrap d-none d-md-block position-relative">
+              <button
+                className="city-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setCityOpen(!cityOpen);
+                  setUserOpen(false);
+                }}
+              >
+                <span>📍</span>
+                <span className="city-name">{city.selectedCity}</span>
+                <span className="city-caret">▾</span>
+              </button>
+              {cityOpen && (
+                <div className="city-dropdown">
+                  {" "}
+                  <p className="city-dropdown-title">Select your city</p>
+                  <div className="city-grid">
+                    {city.cities.map((c: string) => (
+                      <button
+                        key={c}
+                        className={
+                          "city-option " +
+                          (city.selectedCity === c ? "city-selected" : "")
+                        }
+                        onClick={() => {
+                          city.setCity(c);
+                          setCityOpen(false);
+                        }}
+                      >
+                        {c}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+            {auth.isLoggedIn ? (
+              <div className="user-menu-wrap position-relative">
+                <button
+                  className="user-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setUserOpen(!userOpen);
+                    setCityOpen(false);
+                  }}
+                >
+                  <span className="user-avatar">
+                    {auth.currentUser?.name?.charAt(0).toUpperCase()}
+                  </span>
+                  <span className="user-name d-none d-md-inline">
+                    {auth.currentUser?.name}
+                  </span>
+                  <span className="city-caret">▾</span>
+                </button>
+                {userOpen && (
+                  <div className="user-dropdown">
+                    <div className="dropdown-user-info">
+                      <span className="dropdown-avatar">
+                        {auth.currentUser?.name?.charAt(0).toUpperCase()}
+                      </span>
+                      <div>
+                        <p className="dropdown-name">
+                          {auth.currentUser?.name}
+                        </p>
+                        <p className="dropdown-email">
+                          {auth.currentUser?.email}
+                        </p>
+                      </div>
+                    </div>
+                    <hr className="dropdown-divider" />
+                    <Link
+                      to="/bookings"
+                      className="dropdown-item-link"
+                      onClick={() => setUserOpen(false)}
+                    >
+                      🎟️ My Bookings
+                    </Link>
+                    <hr className="dropdown-divider" />
+                    <button
+                      className="dropdown-logout"
+                      onClick={() => {
+                        setUserOpen(false);
+                        auth.logout();
+                        nav("/");
+                      }}
+                    >
+                      🚪 Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link to="/login" className="btn-signin">
+                Sign in
+              </Link>
+            )}
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
+}

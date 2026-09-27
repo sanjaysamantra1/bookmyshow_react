@@ -1,1 +1,97 @@
-import {useState} from 'react';import {Link,useNavigate} from 'react-router-dom';import {useAuth} from '../context/AppContext';import './register.css';export default function Register(){const auth=useAuth(),nav=useNavigate();const [name,setName]=useState(''),[email,setEmail]=useState(''),[password,setPassword]=useState(''),[confirm,setConfirm]=useState(''),[error,setError]=useState(''),[success,setSuccess]=useState('');const submit=()=>{setError('');setSuccess('');if(!name||!email||!password||!confirm)return setError('Please fill in all fields.');if(password!==confirm)return setError('Passwords do not match.');if(password.length<6)return setError('Password must be at least 6 characters.');if(auth.register(name,email,password)){setSuccess('Account created! Redirecting to login...');setTimeout(()=>nav('/login'),1500)}else setError('An account with this email already exists.')};return <div className="auth-page"><div className="auth-card"><div className="text-center"><img src="/images/bms-logo.png" alt="BookMyShow" className="auth-logo"/><h4 className="auth-title">Create your account</h4><p className="auth-sub">Join millions of BookMyShow users</p></div>{error&&<div className="alert alert-danger py-2 small rounded-3 mb-3">{error}</div>}{success&&<div className="alert alert-success py-2 small rounded-3 mb-3">{success}</div>}<div className="mb-3"><label className="form-label">Full Name</label><input className="form-control" value={name} onChange={e=>setName(e.target.value)} placeholder="John Doe"/></div><div className="mb-3"><label className="form-label">Email address</label><input type="email" className="form-control" value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@example.com"/></div><div className="mb-3"><label className="form-label">Password</label><input type="password" className="form-control" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Min. 6 characters"/></div><div className="mb-4"><label className="form-label">Confirm Password</label><input type="password" className="form-control" value={confirm} onChange={e=>setConfirm(e.target.value)} placeholder="••••••••"/></div><button className="btn-bms" onClick={submit}>Create Account</button><p className="auth-footer-text">Already have an account? <Link to="/login">Sign in</Link></p></div></div>}
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AppContext";
+import "./register.css";
+export default function Register() {
+  const auth = useAuth(),
+    nav = useNavigate();
+  const [name, setName] = useState(""),
+    [email, setEmail] = useState(""),
+    [password, setPassword] = useState(""),
+    [confirm, setConfirm] = useState(""),
+    [error, setError] = useState(""),
+    [success, setSuccess] = useState("");
+  const submit = () => {
+    setError("");
+    setSuccess("");
+    if (!name || !email || !password || !confirm)
+      return setError("Please fill in all fields.");
+    if (password !== confirm) return setError("Passwords do not match.");
+    if (password.length < 6)
+      return setError("Password must be at least 6 characters.");
+    if (auth.register(name, email, password)) {
+      setSuccess("Account created! Redirecting to login...");
+      setTimeout(() => nav("/login"), 1500);
+    } else setError("An account with this email already exists.");
+  };
+  return (
+    <div className="auth-page">
+      <div className="auth-card">
+        <div className="text-center">
+          <img
+            src="/images/bms-logo.png"
+            alt="BookMyShow"
+            className="auth-logo"
+          />
+          <h4 className="auth-title">Create your account</h4>
+          <p className="auth-sub">Join millions of BookMyShow users</p>
+        </div>
+        {error && (
+          <div className="alert alert-danger py-2 small rounded-3 mb-3">
+            {error}
+          </div>
+        )}
+        {success && (
+          <div className="alert alert-success py-2 small rounded-3 mb-3">
+            {success}
+          </div>
+        )}
+        <div className="mb-3">
+          <label className="form-label">Full Name</label>
+          <input
+            className="form-control"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="John Doe"
+          />
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Email address</label>
+          <input
+            type="email"
+            className="form-control"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="you@example.com"
+          />
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Password</label>
+          <input
+            type="password"
+            className="form-control"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Min. 6 characters"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="form-label">Confirm Password</label>
+          <input
+            type="password"
+            className="form-control"
+            value={confirm}
+            onChange={(e) => setConfirm(e.target.value)}
+            placeholder="••••••••"
+          />
+        </div>
+        <button className="btn-bms" onClick={submit}>
+          Create Account
+        </button>
+        <p className="auth-footer-text">
+          Already have an account? <Link to="/login">Sign in</Link>
+        </p>
+      </div>
+    </div>
+  );
+}
